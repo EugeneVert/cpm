@@ -28,18 +28,17 @@ fn find_critical_path(tasks: &mut [Task]) -> Vec<usize> {
         }
         // calc min_finish
         tasks[i].min_finish = tasks[i].min_start + tasks[i].duration;
-
-        // init max* for backward pass
-        tasks[i].max_start = tasks[i].min_start;
-        tasks[i].max_finish = tasks[i].min_finish;
     }
+
+    tasks[tasks.len() - 1].max_finish = tasks[tasks.len() - 1].min_finish;
+    tasks[tasks.len() - 1].max_start = tasks[tasks.len() - 1].min_start;
 
     // Backward
     for i in (0..tasks.len()).rev() {
         for j in tasks[i].prev_tasks.clone() {
-            let a = tasks[j].max_finish - tasks[j].duration;
+            let a = tasks[i].max_start;
             if a < tasks[j].max_finish {
-                tasks[j].max_finish = tasks[i].max_start;
+                tasks[j].max_finish = a;
                 tasks[j].max_start = tasks[j].max_finish - tasks[j].duration;
             }
         }

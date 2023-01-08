@@ -1,4 +1,4 @@
-#[derive(Default, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub struct Task {
     pub id: usize,
     pub name: String,
@@ -8,6 +8,21 @@ pub struct Task {
     pub min_finish: i32,
     pub max_finish: i32,
     pub prev_tasks: Vec<usize>,
+}
+
+impl Default for Task {
+    fn default() -> Self {
+        Self {
+            id: 0,
+            name: String::new(),
+            duration: -1,
+            min_start: 0,
+            max_start: i32::MAX,
+            min_finish: 0,
+            max_finish: i32::MAX,
+            prev_tasks: Vec::new(),
+        }
+    }
 }
 
 impl Task {
