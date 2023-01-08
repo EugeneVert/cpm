@@ -12,6 +12,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut tasks = input_parser::parse_csv_input_file(Path::new("./input.csv"))?;
     let critical_path_idxs = find_critical_path(&mut tasks);
     export_graphviz(&tasks, &critical_path_idxs)?;
+    export_stdout(&tasks, &critical_path_idxs);
     Ok(())
 }
 
@@ -71,4 +72,33 @@ fn export_graphviz(tasks: &[Task], critical_path_idxs: &[usize]) -> std::io::Res
     }
     writeln!(writer, "}}")?;
     Ok(())
+}
+
+fn export_stdout(tasks: &[Task], critical_path_idxs: &[usize]) {
+    println!("    \tdura \tmin  \tmin   \tmax  \tmax");
+    println!("Name\t  tion\tstart\tfinish\tstart\tfinish\tmargin");
+    for task in tasks {
+        if critical_path_idxs.contains(&task.id) {
+            println!(
+                "*{}*\t{}\t{}\t{}\t{}\t{}\t0",
+                task.name,
+                task.duration,
+                task.min_start,
+                task.min_finish,
+                task.max_start,
+                task.max_finish
+            );
+            continue;
+        }
+        println!(
+            " {} \t{}\t{}\t{}\t{}\t{}\t{}",
+            task.name,
+            task.duration,
+            task.min_start,
+            task.min_finish,
+            task.max_start,
+            task.max_finish,
+            task.min_finish - task.min_start
+        );
+    }
 }
