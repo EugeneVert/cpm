@@ -18,18 +18,19 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn find_critical_path(tasks: &mut [Task]) -> Vec<usize> {
     // Forward
     for i in 0..tasks.len() {
+        // find min_start as maximum min_finish of previous nodes
         for j in tasks[i].prev_tasks.clone() {
-            let a = tasks[j].min_finish + tasks[i].duration;
-            if a > tasks[i].min_finish {
-                tasks[i].min_finish = a;
-                tasks[i].max_finish = a;
+            let a = tasks[j].min_finish;
+            if a > tasks[i].min_start {
+                tasks[i].min_start = a;
             }
         }
-        let b = tasks[i].min_finish - tasks[i].duration;
-        if b > tasks[i].min_start {
-            tasks[i].min_start = b;
-            tasks[i].max_start = b;
-        }
+        // calc min_finish
+        tasks[i].min_finish = tasks[i].min_start + tasks[i].duration;
+
+        // init max* for backward pass
+        tasks[i].max_start = tasks[i].min_start;
+        tasks[i].max_finish = tasks[i].min_finish;
     }
 
     // Backward
