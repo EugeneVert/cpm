@@ -1,0 +1,9 @@
+name, duration, prev
+W0,0,
+W1,4, W0
+W2,6, W0
+W3,7, W1 W2
+W4,3, W2
+W5,4, W3
+W6,5, W4
+W7,3, W5 W6
