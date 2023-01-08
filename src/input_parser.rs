@@ -11,7 +11,7 @@ pub fn parse_csv_input_file(filepath: &Path) -> Result<Vec<Task>, Box<dyn Error>
     for line in reader.lines().skip(1) {
         let line = line?;
         // Comma separated
-        let mut split = line.split(",");
+        let mut split = line.split(',');
         // 3 Fields
         let (name, duration, prev_nodes_names) = || -> Option<_> {
             Some((
@@ -23,8 +23,8 @@ pub fn parse_csv_input_file(filepath: &Path) -> Result<Vec<Task>, Box<dyn Error>
                 split
                     .next()?
                     .trim()
-                    .split(" ")
-                    .filter(|s| s != &"")
+                    .split(' ')
+                    .filter(|s| !s.is_empty())
                     .map(|s| s.to_string()),
             ))
         }()

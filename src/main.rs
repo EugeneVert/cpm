@@ -11,7 +11,7 @@ use task::Task;
 fn main() -> Result<(), Box<dyn Error>> {
     let mut tasks = input_parser::parse_csv_input_file(Path::new("./input.csv"))?;
     let critical_path_idxs = find_critical_path(&mut tasks);
-    export_graphviz(&tasks, &critical_path_idxs);
+    export_graphviz(&tasks, &critical_path_idxs)?;
     Ok(())
 }
 
@@ -61,7 +61,7 @@ fn export_graphviz(tasks: &[Task], critical_path_idxs: &[usize]) -> std::io::Res
     }
     for task in tasks {
         for prev in &task.prev_tasks {
-            if critical_path_idxs.contains(&prev) && critical_path_idxs.contains(&task.id) {
+            if critical_path_idxs.contains(prev) && critical_path_idxs.contains(&task.id) {
                 writeln!(writer, "Node{} -> Node{} [color=\"blue\"]", prev, task.id)?;
             } else {
                 writeln!(writer, "Node{} -> Node{}", prev, task.id)?;
